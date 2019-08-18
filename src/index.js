@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
-import "./style.scss";
+import './style.scss';
 
 const App = () => {
-  useEffect(() => console.log(" Use Effect"), []);
+  useEffect(() => console.log(' Use Effect'), []);
   return (
     <>
       <div>
@@ -14,4 +14,4 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector('#root'));
