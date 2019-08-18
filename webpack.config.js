@@ -4,6 +4,7 @@ const Dotenv = require("dotenv-webpack");
 const SimpleProgressWebpackPlugin = require("simple-progress-webpack-plugin");
 const ErrorOverlayPlugin = require("error-overlay-webpack-plugin");
 const autoprefixer = require("autoprefixer");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => ({
   entry: [path.resolve(__dirname, `./src/index.js`)],
@@ -88,8 +89,21 @@ module.exports = (env, argv) => ({
       {
         test: /\.css$/,
         use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              publicPath: "./",
+              hmr: process.env.NODE_ENV === "development"
+            }
+          },
+          {
+            loader: "css-loader"
+          },
           {
             loader: require.resolve("postcss-loader"),
             options: {
@@ -129,7 +143,14 @@ module.exports = (env, argv) => ({
       path: path.resolve(__dirname, `./.env.${argv.mode}`),
       systemvars: true
     }),
-    new ErrorOverlayPlugin()
+    new ErrorOverlayPlugin(),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // all options are optional
+      filename: "style.css",
+      chunkFilename: "[id].css",
+      ignoreOrder: false // Enable to remove warnings about conflicting order
+    })
   ],
   optimization: {
     splitChunks: {
