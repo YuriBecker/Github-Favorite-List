@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import * as FavoritesActions from '../../store/actions/favorites';
+import { Creators as FavoriteActions } from '../../store/ducks/favorites';
 
 function Main({ favorites, addFavoriteRequest }) {
 	const [inputText, setInputText] = useState('');
@@ -24,6 +24,7 @@ function Main({ favorites, addFavoriteRequest }) {
       />
       <button type="submit">Search</button>
       {favorites.loading && <span>Loading...</span>}
+      {!!favorites.error && <span>{favorites.error}</span>}
     </form>
 
     <ul>
@@ -52,7 +53,8 @@ Main.propTypes = {
 				description: PropTypes.string,
 				url: PropTypes.string
 			})
-		).isRequired
+		).isRequired,
+		error: PropTypes.oneOfType([null, PropTypes.string])
 	}).isRequired
 };
 
@@ -60,7 +62,7 @@ const mapStateToProps = state => ({
 	favorites: state.favorites
 });
 
-const mapDispathToProps = dispath => bindActionCreators(FavoritesActions, dispath);
+const mapDispathToProps = dispath => bindActionCreators(FavoriteActions, dispath);
 
 export default connect(
 	mapStateToProps,
